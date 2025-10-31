@@ -9,10 +9,11 @@ auth_bp = Blueprint("auth_bp", __name__)
 def register():
     data = request.get_json()
     full_name = data.get("full_name")
+    username = data.get("username") or data.get("email").split('@')[0]
     email = data.get("email")
     password = data.get("password")
-    confirm_password = data.get("confirm_password")
-    role = data.get("role")
+    confirm_password = data.get("confirm_password", password)
+    role = data.get("role", "traveler")
 
     if password != confirm_password:
         return jsonify({"error": "Passwords do not match"}), 400
@@ -20,7 +21,7 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({"error": "Email already exists"}), 400
 
-    user = User(full_name=full_name, email=email, role=role)
+    user = User(full_name=full_name, username=username, email=email, role=role)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
