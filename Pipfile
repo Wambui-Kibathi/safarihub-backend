@@ -21,6 +21,7 @@ stripe = "*"
 paypalrestsdk = "*"
 flasgger = "*"
 cloudinary = "*"
+mailjet-rest = "*"
 
 [dev-packages]
 
